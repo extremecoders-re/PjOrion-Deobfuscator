@@ -24,7 +24,7 @@ def rename(code_obj):
     names = code_obj.co_names
     varnames = tuple('var{}'.format(i) for i in range(len(code_obj.co_varnames)))
     filename = code_obj.co_filename
-    name = code_obj.co_name  # XXX: Rename this too
+    name = 'renamed'  # XXX: Use a better way
     firstlineno = code_obj.co_firstlineno
     lnotab = code_obj.co_lnotab
 
