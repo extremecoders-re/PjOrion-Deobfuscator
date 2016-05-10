@@ -6,6 +6,7 @@ This is done by recursively traversing the code objects.
 import marshal
 import types
 import sys
+import random
 
 def rename(code_obj):
     mod_const = []
@@ -15,22 +16,22 @@ def rename(code_obj):
         else:
             mod_const.append(const)
 
-    argcount = code_obj.co_argcount
-    nlocals = code_obj.co_nlocals
-    stacksize = code_obj.co_stacksize
-    flags = code_obj.co_flags
-    codestring = code_obj.co_code
-    constants = tuple(mod_const)
-    names = code_obj.co_names
-    varnames = tuple('var{}'.format(i) for i in range(len(code_obj.co_varnames)))
-    filename = code_obj.co_filename
-    name = 'renamed'  # XXX: Use a better way
-    firstlineno = code_obj.co_firstlineno
-    lnotab = code_obj.co_lnotab
+    co_argcount = code_obj.co_argcount
+    co_nlocals = code_obj.co_nlocals
+    co_stacksize = code_obj.co_stacksize
+    co_flags = code_obj.co_flags
+    co_codestring = code_obj.co_code
+    co_constants = tuple(mod_const)
+    co_names = code_obj.co_names
+    co_varnames = tuple('var{}'.format(i) for i in range(len(code_obj.co_varnames)))
+    co_filename = code_obj.co_filename
+    co_name = 'co' + str(random.randint(100,999))
+    co_firstlineno = code_obj.co_firstlineno
+    co_lnotab = code_obj.co_lnotab
 
-    return types.CodeType(argcount, nlocals, stacksize, \
-                          flags, codestring, constants, names, \
-                          varnames, filename, name, firstlineno, lnotab)
+    return types.CodeType(co_argcount, co_nlocals, co_stacksize, \
+                          co_flags, co_codestring, co_constants, co_names, \
+                          co_varnames, co_filename, co_name, co_firstlineno, co_lnotab)
 
 
 def main():

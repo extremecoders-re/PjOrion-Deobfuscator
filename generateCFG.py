@@ -14,7 +14,7 @@ import Queue
 import collections
 import pydotplus
 import sys
-
+import os.path
 
 class Instruction:
     def __init__(self, offset, opkode, mnemonic, size, args):
@@ -383,8 +383,8 @@ def drawCFG(code_obj, filename):
     global entrypoint
 
     # For normal codeobjects entrypoint = oep = 0
-    entrypoint = oep = findOEP(code_obj)
-    # entrypoint = oep = 0
+    #entrypoint = oep = findOEP(code_obj)
+    entrypoint = oep = 0
     if oep == -1:
         print 'Not generating cfg for ', code_obj.co_name
         return
@@ -406,10 +406,11 @@ def drawCFG(code_obj, filename):
         
 # XXX: Find a better filenaming convention, may use co_name
 i = 1 # Variableto track filename of output svg
+filenameprefix = ''
 
 def recurseCodeObjects(c_obj):
-    global i
-    drawCFG(c_obj, '{}.svg'.format(i))
+    global i, filenameprefix
+    drawCFG(c_obj, '{}{}.svg'.format(filenameprefix, i))
     i += 1
 
     for const in c_obj.co_consts:
@@ -418,11 +419,13 @@ def recurseCodeObjects(c_obj):
 
 
 def main():
+    global filenameprefix
     if len(sys.argv) < 2:
-        print 'Usage: generateCFG.py <source file>'
+        print 'Usage: generateCFG.py <pyc file>'
         return
         
     with open(sys.argv[1], 'rb') as fSrc:
+        filenameprefix = os.path.splitext(sys.argv[1])[0]
         fSrc.seek(8)
         code_obj = marshal.load(fSrc)
         recurseCodeObjects(code_obj)
